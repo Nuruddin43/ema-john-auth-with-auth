@@ -1,19 +1,12 @@
 import React, { useState } from "react";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import auth from "../../firebase.init";
-import "./Login.css";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+const Shipment = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathName || "/";
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  //   const navigate = useNavigate();
 
   const handleEmailBlur = (event) => {
     setEmail(event.target.value);
@@ -23,20 +16,19 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  if (user) {
-    navigate(from, { replace: true });
-  }
+  const handleConfirmPasswordBlur = (event) => {
+    setConfirmPassword(event.target.value);
+  };
 
-  const handleUserSignIn = (event) => {
+  const handleCreateUser = (event) => {
     event.preventDefault();
-    signInWithEmailAndPassword(email, password);
   };
 
   return (
     <div className="form-container">
       <div>
-        <h1 className="form-title">Login</h1>
-        <form onSubmit={handleUserSignIn}>
+        <h1 className="form-title">Shipping Information</h1>
+        <form onSubmit={handleCreateUser}>
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
@@ -57,18 +49,25 @@ const Login = () => {
               required
             />
           </div>
+          <div className="input-group">
+            <label htmlFor="confirm-password">Confirm Password</label>
+            <input
+              onBlur={handleConfirmPasswordBlur}
+              type="password"
+              name="confirm-password"
+              id=""
+              required
+            />
+          </div>
+          <p style={{ color: "red" }}>{error}</p>
 
-          <p style={{ color: "red" }}>{error?.message}</p>
-
-          {loading && <p>Loading...</p>}
-
-          <input className="form-submit" type="submit" value="Login" required />
+          <input className="form-submit" type="submit" value="Sign Up" />
         </form>
 
         <p>
-          New to Ema-John?{" "}
-          <Link className="form-link" to="/signup">
-            Create an Acoount
+          Already Have an Account?{" "}
+          <Link className="form-link" to="/login">
+            Login
           </Link>{" "}
         </p>
       </div>
@@ -76,4 +75,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Shipment;
